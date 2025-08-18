@@ -13,7 +13,7 @@ This project is designed as a learning and mentorship tool for viewing JavaScrip
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/JavaScriptTasks.git
+    git clone git@github.com:Houda-Farrag/JavaScritpTasksMonitorShip.git
     ```
 2. Open the project folder.
 3. Follow instructions in each task file to run and view results.
