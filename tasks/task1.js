@@ -2,7 +2,7 @@ export default {
   title: "Task 1 - Form Validation and Interactive Results",
   description:
     "تعلم كيفية معالجة مدخلات الـ Forms في JavaScript مع التحقق من الصحة وعرض النتائج بشكل تفاعلي، مع تطبيق مبادئ تصميم الواجهات الحديثة.",
-  github: "https://github.com/yourusername/task1",
+  github: "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task1.js",
   notes:
     "في هذا التمرين، ستقوم بإنشاء نموذج بسيط لجمع بيانات المستخدم مثل الاسم والعمر والهواية. ستتعلم كيفية التحقق من صحة المدخلات والتأكد من أن المستخدم قد أدخل جميع المعلومات المطلوبة بشكل صحيح. بعد ذلك، ستعرض رسالة ترحيبية مخصصة بناءً على المدخلات التي تم جمعها.",
   render: (container) => {
