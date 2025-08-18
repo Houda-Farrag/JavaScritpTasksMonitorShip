@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Tasks Showcase</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Prism.js for syntax highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+  <!-- Layout container -->
+  <div class="flex h-screen">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-white border-r shadow-lg p-4 overflow-y-auto">
+      <h1 class="text-xl font-bold mb-4">Tasks</h1>
+      <!-- Task list will render here -->
+      <div id="sidebar2" class="space-y-2">
+        <!-- Task items will be dynamically inserted here -->
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main id="content" class="flex-1 p-6 overflow-hidden ">
+      <div class="text-gray-500 text-center mt-20">
+        <h2 class="text-2xl font-semibold">Welcome 👋</h2>
+        <p>Select a task from the left to view details</p>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Main App -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>
