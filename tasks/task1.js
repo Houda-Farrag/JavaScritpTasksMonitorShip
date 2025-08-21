@@ -1,3 +1,4 @@
+import CreateTitle from "../components/TitleComponent.js";
 export default {
   title: "Task 1 - Form Validation and Interactive Results",
   description:
@@ -11,10 +12,14 @@ export default {
     wrapper.style.direction = "rtl"; // Set text direction for Arabic
     wrapper.className =
       "flex flex-col items-center space-y-4 p-4 bg-gray-50 border rounded shadow ";
-    const title = document.createElement("h1");
-    title.className = "text-2xl font-bold text-center";
-    title.innerText = "أدخل بياناتك";
-
+    // const title = document.createElement("h1");
+    // title.className = "text-2xl font-bold text-center";
+    // title.innerText = "أدخل بياناتك";
+    const title = CreateTitle(
+      "أدخل بياناتك",
+      "text-2xl font-bold text-center",
+      "h1"
+    );
     const form = document.createElement("form");
     form.className = "space-y-4 w-full max-w-md bg-white p-6 rounded shadow-md";
 
@@ -47,21 +52,21 @@ export default {
       "w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
     const showMessage = document.createElement("p");
-    const animationFadein = document.createElement("style");
-    animationFadein.innerHTML = `
-      @keyframes fade-in {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    }
-    `;
-    document.head.appendChild(animationFadein);
+    // const animationFadein = document.createElement("style");
+    // animationFadein.innerHTML = `
+    //   @keyframes fade-in {
+    //     from {
+    //       opacity: 0;
+    //       transform: translateY(20px);
+    //     }
+    //     to {
+    //       opacity: 1;
+    //       transform: translateY(0);
+    //     }
+    //   }
+    // }
+    // `;
+    // document.head.appendChild(animationFadein);
     showMessage.className = "text-lg text-gray-700 hidden animate-fade-in mt-4 border p-4 rounded ";
     showMessage.innerText = "";
     showMessage.style.animation = "fade-in 0.5s ease-in-out";

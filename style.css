@@ -25,7 +25,12 @@ body {
 }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: 1rem;
@@ -37,6 +42,7 @@ a {
     text-decoration: none;
     transition: color 0.2s;
 }
+
 a:hover {
     color: #005a9e;
     text-decoration: underline;
@@ -53,6 +59,7 @@ button {
     cursor: pointer;
     transition: background 0.2s;
 }
+
 button:hover {
     background: #005a9e;
 }
@@ -68,9 +75,11 @@ img {
 .text-center {
     text-align: center;
 }
+
 .mt-2 {
     margin-top: 2rem;
 }
+
 .mb-2 {
     margin-bottom: 2rem;
 }
@@ -80,8 +89,21 @@ img {
     body {
         font-size: 15px;
     }
+
     .container {
         width: 98%;
         padding: 1rem 0;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -214,6 +214,61 @@ export default {
     container.appendChild(resultContainer);
     container.appendChild(inputsContainer);
     container.appendChild(buttonsContainer);
+    // =======================================
+    function handleOperation(operationFn, firstNumberInput, secondNumberInput) {
+  const firstNumber = parseFloat(firstNumberInput.value);
+  const secondNumber = parseFloat(secondNumberInput.value);
+  try {
+    const result = operationFn(firstNumber, secondNumber);
+    const resultContainer = document.getElementById("result");
+    //  \`<p>function: <strong class="text-blue-500">\${add.name}</strong></p> <p> Result: = <strong class="text-blue-500">\${add(0, 0)}</strong></p>\`
+    resultContainer.innerHTML = \`<p>function: <strong class="text-blue-500">\${operationFn.name}</strong></p> <p> Result: = <strong class="text-blue-500">\${result}</strong></p>\`;
+  } catch (error) {
+    const resultContainer = document.getElementById("result");
+    resultContainer.innerHTML = \`Error: \${error.message}\`;
+  }
+}
+
+function validateNumbers(a, b) {
+  if (typeof a !== "number" || typeof b !== "number") {
+    throw new Error("Both arguments must be numbers");
+  }
+  if (isNaN(a) || isNaN(b)) {
+    throw new Error("Arguments must not be NaN");
+  }
+}
+
+// additional function for two numbers
+function add(a, b) {
+  validateNumbers(a, b);
+  return a + b;
+}
+
+// multiply function
+function multiply(a, b) {
+  validateNumbers(a, b);
+  return a * b;
+}
+
+// divide function
+function divide(a, b) {
+  validateNumbers(a, b);
+  if (b === 0) {
+    throw new Error("Division by zero is not allowed");
+  }
+  return a / b;
+}
+
+// subtract function
+function subtract(a, b) {
+  validateNumbers(a, b);
+  if (b > a) {
+    throw new Error(
+      "Second number must be less than or equal to the first number"
+    );
+  }
+  return a - b;
+}
   }`,
 };
 
@@ -264,10 +319,10 @@ function divide(a, b) {
 // subtract function
 function subtract(a, b) {
   validateNumbers(a, b);
-  if (b > a) {
-    throw new Error(
-      "Second number must be less than or equal to the first number"
-    );
-  }
+  // if (b > a) {
+  //   throw new Error(
+  //     "Second number must be less than or equal to the first number"
+  //   );
+  // }
   return a - b;
 }
