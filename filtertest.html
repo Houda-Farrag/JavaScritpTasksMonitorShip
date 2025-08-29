@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Filter Buttons</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 1000px;
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .filters-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .product-price {
+            font-size: 1.1rem;
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background-color: #f0f4f8;
+            color: #5a67d8;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .instructions {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 4px;
+        }
+        
+        .instructions h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        
+        .instructions p {
+            margin-bottom: 8px;
+            color: #37474f;
+        }
+        
+        @media (max-width: 600px) {
+            .buttons-container {
+                flex-direction: column;
+            }
+            
+            .filter-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dynamic Filter Buttons</h1>
+            <p class="subtitle">Created with JavaScript</p>
+        </header>
+        
+        <div class="content">
+            <div class="filters-container">
+                <h2>Filter Products</h2>
+                <div id="buttons-container" class="buttons-container">
+                    <!-- Buttons will be generated here with JavaScript -->
+                </div>
+            </div>
+            
+            <div id="products-container" class="products-container">
+                <!-- Products will be generated here with JavaScript -->
+            </div>
+            
+            <div class="instructions">
+                <h3>How It Works</h3>
+                <p>1. All buttons are created dynamically using JavaScript</p>
+                <p>2. Each button has a custom filter function attached</p>
+                <p>3. The product list is also generated with JavaScript</p>
+                <p>4. Try clicking the buttons to see the filtering in action!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample product data
+        const products = [
+            { id: 1, name: "Wireless Headphones", price: 89.99, category: "electronics" },
+            { id: 2, name: "Running Shoes", price: 129.99, category: "clothing" },
+            { id: 3, name: "Smart Watch", price: 199.99, category: "electronics" },
+            { id: 4, name: "Coffee Maker", price: 49.99, category: "home" },
+            { id: 5, name: "Desk Lamp", price: 34.99, category: "home" },
+            { id: 6, name: "Yoga Mat", price: 24.99, category: "fitness" },
+            { id: 7, name: "Water Bottle", price: 19.99, category: "fitness" },
+            { id: 8, name: "Backpack", price: 59.99, category: "accessories" },
+            { id: 9, name: "Bluetooth Speaker", price: 79.99, category: "electronics" },
+            { id: 10, name: "Novel - The Alchemist", price: 14.99, category: "books" }
+        ];
+
+        // Filter buttons configuration
+        const buttonsFilter = [
+            {
+                name: "All Products",
+                fn: (products) => products,
+                active: true
+            },
+            {
+                name: "Under $50",
+                fn: (products) => products.filter(product => product.price < 50),
+                active: false
+            },
+            {
+                name: "$50 - $100",
+                fn: (products) => products.filter(product => product.price >= 50 && product.price <= 100),
+                active: false
+            },
+            {
+                name: "Over $100",
+                fn: (products) => products.filter(product => product.price > 100),
+                active: false
+            },
+            {
+                name: "Electronics",
+                fn: (products) => products.filter(product => product.category === "electronics"),
+                active: false
+            },
+            {
+                name: "Home Products",
+                fn: (products) => products.filter(product => product.category === "home"),
+                active: false
+            }
+        ];
+
+        // Function to create filter buttons
+        function createFilterButtons() {
+            const buttonsContainer = document.getElementById('buttons-container');
+            
+            buttonsFilter.forEach((buttonConfig, index) => {
+                // Create button element
+                const button = document.createElement('button');
+                button.textContent = buttonConfig.name;
+                button.classList.add('filter-btn');
+                
+                // Add active class if this is the default active button
+                if (buttonConfig.active) {
+                    button.classList.add('active');
+                }
+                
+                // Add click event listener
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    // Apply the filter
+                    const filteredProducts = buttonConfig.fn(products);
+                    
+                    // Display filtered products
+                    displayProducts(filteredProducts);
+                });
+                
+                // Append button to container
+                buttonsContainer.appendChild(button);
+            });
+        }
+
+        // Function to display products
+        function displayProducts(productsToDisplay) {
+            const productsContainer = document.getElementById('products-container');
+            
+            // Clear current products
+            productsContainer.innerHTML = '';
+            
+            // Check if there are products to display
+            if (productsToDisplay.length === 0) {
+                const noProductsMessage = document.createElement('div');
+                noProductsMessage.classList.add('no-products');
+                noProductsMessage.textContent = 'No products match your filter criteria.';
+                productsContainer.appendChild(noProductsMessage);
+                return;
+            }
+            
+            // Create product cards
+            productsToDisplay.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                
+                productCard.innerHTML = `
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-price">$${product.price.toFixed(2)}</p>
+                        <span class="product-category">${product.category}</span>
+                    </div>
+                `;
+                
+                productsContainer.appendChild(productCard);
+            });
+        }
+
+        // Initialize the page
+        function init() {
+            createFilterButtons();
+            
+            // Display all products initially
+            const initialProducts = buttonsFilter[0].fn(products);
+            displayProducts(initialProducts);
+        }
+
+        // Run initialization when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
