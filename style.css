@@ -16,6 +16,13 @@ body {
     background-color: #f9f9f9;
 }
 
+/* In your CSS file */
+
+.dark body {
+  background: #222;
+  color: #fff;
+}
+
 /* Responsive container */
 .container {
     width: 90%;
