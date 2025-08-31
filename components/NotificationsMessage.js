@@ -10,11 +10,9 @@ export default class NotificationsMessage {
     `;
     document.body.appendChild(this.notification);
 
-    // Attach close event to the button
     const closeBtn = this.notification.querySelector(".close-btn");
     closeBtn.addEventListener("click", () => this.closeNotification());
 
-    // Auto remove after duration
     this.timeoutId = setTimeout(() => {
       this.closeNotification();
     }, duration);
