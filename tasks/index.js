@@ -10,6 +10,8 @@ import task9 from "./task9.js";
 import task10 from "./task10.js";
 import task11 from "./task11.js";
 import task12  from "./task12.js";
-const tasks = [task1, task2, task3, task4, task5, task6 , task7, task8, task9, task10 , task11, task12];
+import task13 from "./task13.js";
+import task14 from './task14.js'
+const tasks = [task1, task2, task3, task4, task5, task6 , task7, task8, task9, task10 , task11, task12, task13, task14];
 
 export default tasks;

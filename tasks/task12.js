@@ -1,7 +1,7 @@
 import ButtonComponent from "../components/Buttons.js";
 import CreateTitle from "../components/TitleComponent.js";
 export default {
-  title: "Task 12 - ",
+  title: "Task 12 - Customizable Background Colors",
   description: "تعلم كيفية تغيير لون خلفية الصفحة وحفظ التفضيلات باستخدام JavaScript و localStorage.",
   github:
     "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task12.js",
@@ -15,7 +15,7 @@ export default {
       "max-w-5xl mx-auto border border-gray-300 p-6 bg-white rounded-lg shadow-lg flex flex-col gap-4 ";
     wrapper.style.direction = "rtl";
     wrapper.style.fontFamily = "Arial, sans-serif";
-
+    wrapper.classList.add(localStorage.getItem("selectedColorClass") || "bg-[" + localStorage.getItem("selectedColor") + "]" );
     const title = CreateTitle(
       "مُحدد ألوان الخلفية",
       "text-3xl font-bold mb-4 text-center border-b border-gray-300 p-6 bg-gray-200  ",
@@ -37,7 +37,8 @@ export default {
     labelCustomColor.className = "bg-white text-black text-lg font-bold mx-auto px-2 py-1 rounded";
     colorInput.onchange = () => {
       labelCustomColor.textContent = colorInput.value;
-      wrapper.classList.add("bg-[" + colorInput.value + "]");
+      localStorage.setItem("selectedColor", colorInput.value);
+      wrapper.classList.add("bg-[" + localStorage.getItem("selectedColor") + "]");
     };
     conatinerCustomColor.appendChild(labelCustomColor);
     conatinerCustomColor.appendChild(colorInput);
@@ -50,11 +51,13 @@ export default {
         text: button.name,
         className: ` px-4 py-2 ${button.colorClass} text-white rounded hover:bg-${button.colorClass} h-fit`,
         onClick: () => {
+          localStorage.setItem("selectedColor", button.color);
+          localStorage.setItem("selectedColorClass", button.colorClass);
           wrapper.classList.remove(
             ...buttons.map((b) => b.colorClass),
             "bg-[" + colorInput.value + "]"
           );
-          wrapper.classList.add(button.colorClass);
+          wrapper.classList.add(localStorage.getItem("selectedColorClass"));
         },
       });
       buttonsContainer.appendChild(buttonElement);
