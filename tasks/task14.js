@@ -10,7 +10,7 @@ const productsMap = new Map([
 
 export default {
   title: "Task 14 - Map and Set Data Structures in js",
-  description: "",
+  description: "تعلم كيفية استخدام Set و Map في JavaScript لإدارة البيانات بكفاءة، مع التركيز على العمليات الأساسية مثل الإضافة، الحذف، والاسترجاع.",
   github:
     "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task14.js",
   notes: "",

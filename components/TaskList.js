@@ -5,20 +5,37 @@ export default function TaskList(container, tasks, onSelect) {
   const list = document.createElement("ul");
   list.className = "space-y-2";
 
+  // Get last opened task index from localStorage
+  const savedIndex = parseInt(localStorage.getItem("lastTaskIndex"), 10);
+
   tasks.forEach((task, idx) => {
     const item = document.createElement("li");
-    item.className = "cursor-pointer px-3 py-2 rounded hover:bg-gray-100 border border-gray-200";
-    item.innerText =  `Task ${idx + 1}`;
-    item.onclick = (item) => {
+    item.className =
+      "cursor-pointer px-3 py-2 rounded hover:bg-gray-100 border border-gray-200";
+    item.innerText = `Task ${idx + 1}`;
+
+    // Handle clicks
+    item.onclick = (event) => {
       onSelect(task);
-      item.target.classList.add("bg-gray-200");
-      const siblings = item.target.parentElement.children;
+      localStorage.setItem("lastTaskIndex", idx); // save selected index
+
+      const target = event.currentTarget;
+      target.classList.add("bg-gray-200");
+
+      // Reset siblings
+      const siblings = target.parentElement.children;
       Array.from(siblings).forEach((sibling) => {
-        if (sibling !== item.target) {
+        if (sibling !== target) {
           sibling.classList.remove("bg-gray-200");
         }
       });
     };
+
+    if (savedIndex === idx) {
+      item.classList.add("bg-gray-200");
+      onSelect(task); // auto render saved task
+    }
+
     list.appendChild(item);
   });
 
