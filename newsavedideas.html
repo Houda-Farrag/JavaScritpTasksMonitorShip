@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevIdea Vault - JSON Data Management</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .app-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-subtitle {
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+        
+        .idea-form h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .data-management {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .data-management h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .data-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .ideas-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ideas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .section-title {
+            color: var(--primary);
+        }
+        
+        .search-box {
+            display: flex;
+            max-width: 300px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            border-right: none;
+        }
+        
+        .search-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 0 1rem;
+            cursor: pointer;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--light);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .idea-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .idea-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .card-category {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: var(--light);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .card-description {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        
+        .card-footer {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background-color: #e3f2fd;
+            color: var(--secondary);
+        }
+        
+        .status-progress {
+            background-color: #fff8e1;
+            color: var(--warning);
+        }
+        
+        .status-completed {
+            background-color: #e8f5e9;
+            color: var(--success);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            color: var(--secondary);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #777;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="app-title">DevIdea Vault</h1>
+        <p class="app-subtitle">Save and organize your programming ideas with JSON data management</p>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="idea-form">
+                    <h2>Add New Idea</h2>
+                    <form id="addIdeaForm">
+                        <div class="form-group">
+                            <label for="ideaTitle">Project Title</label>
+                            <input type="text" id="ideaTitle" class="form-control" placeholder="My Awesome App" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ideaCategory">Category</label>
+                            <select id="ideaCategory" class="form-control" required>
+                                <option value="">Select a category</option>
+                                <option value="Web App">Web Application</option>
+                                <option value="Mobile App">Mobile App</option>
+                                <option value="Desktop App">Desktop Application</option>
+                                <option value="Game">Game</option>
+                                <option value="Library">Library/Tool</option>
+                                <option value="API">API Service</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ideaDescription">Description</label>
+                            <textarea id="ideaDescription" class="form-control" placeholder="Describe your project idea, technologies you might use, features, etc." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="ideaStatus">Status</label>
+                            <select id="ideaStatus" class="form-control" required>
+                                <option value="New">New Idea</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-block">Save Idea</button>
+                    </form>
+                </div>
+                
+                <div class="data-management">
+                    <h3>Data Management</h3>
+                    <div class="data-buttons">
+                        <button id="exportBtn" class="btn btn-success">Export to JSON</button>
+                        <button id="importBtn" class="btn btn-accent">Import from JSON</button>
+                        <input type="file" id="importFile" class="file-input" accept=".json">
+                        <button id="clearBtn" class="btn">Clear All Ideas</button>
+                    </div>
+                </div>
+            </aside>
+            
+            <main class="ideas-container">
+                <div class="ideas-header">
+                    <h2 class="section-title">My Project Ideas</h2>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search ideas..." id="searchInput">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                </div>
+                
+                <div class="filter-options">
+                    <button class="filter-btn active" data-filter="all">All Ideas</button>
+                    <button class="filter-btn" data-filter="New">New</button>
+                    <button class="filter-btn" data-filter="In Progress">In Progress</button>
+                    <button class="filter-btn" data-filter="Completed">Completed</button>
+                </div>
+                
+                <div class="ideas-grid" id="ideasGrid">
+                    <!-- Idea cards will be dynamically inserted here -->
+                    <div class="empty-state" id="emptyState">
+                        <div>💡</div>
+                        <h3>No ideas yet</h3>
+                        <p>Add your first project idea using the form on the left!</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <footer>
+        <p>DevIdea Vault &copy; 2023 | JSON Data Management</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const addIdeaForm = document.getElementById('addIdeaForm');
+            const ideasGrid = document.getElementById('ideasGrid');
+            const emptyState = document.getElementById('emptyState');
+            const searchInput = document.getElementById('searchInput');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const exportBtn = document.getElementById('exportBtn');
+            const importBtn = document.getElementById('importBtn');
+            const importFile = document.getElementById('importFile');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            // Current filter
+            let currentFilter = 'all';
+            let currentSearch = '';
+            
+            // Load ideas from localStorage (fallback)
+            let ideas = JSON.parse(localStorage.getItem('devIdeas')) || [];
+            
+            // Initialize the app
+            renderIdeas();
+            
+            // Event Listeners
+            addIdeaForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('ideaTitle').value;
+                const category = document.getElementById('ideaCategory').value;
+                const description = document.getElementById('ideaDescription').value;
+                const status = document.getElementById('ideaStatus').value;
+                
+                const newIdea = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    description,
+                    status,
+                    date: new Date().toISOString()
+                };
+                
+                ideas.push(newIdea);
+                saveIdeas();
+                renderIdeas();
+                
+                // Reset form
+                addIdeaForm.reset();
+            });
+            
+            searchInput.addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase();
+                renderIdeas();
+            });
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update filter
+                    currentFilter = this.dataset.filter;
+                    renderIdeas();
+                });
+            });
+            
+            exportBtn.addEventListener('click', function() {
+                exportToJsonFile();
+            });
+            
+            importBtn.addEventListener('click', function() {
+                importFile.click();
+            });
+            
+            importFile.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    importFromJsonFile(file);
+                }
+            });
+            
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all ideas? This cannot be undone.')) {
+                    ideas = [];
+                    saveIdeas();
+                    renderIdeas();
+                }
+            });
+            
+            // Functions
+            function saveIdeas() {
+                // Save to localStorage as fallback
+                localStorage.setItem('devIdeas', JSON.stringify(ideas));
+            }
+            
+            function renderIdeas() {
+                // Filter ideas based on current filter and search
+                let filteredIdeas = ideas.filter(idea => {
+                    const matchesFilter = currentFilter === 'all' || idea.status === currentFilter;
+                    const matchesSearch = idea.title.toLowerCase().includes(currentSearch) || 
+                                         idea.description.toLowerCase().includes(currentSearch) ||
+                                         idea.category.toLowerCase().includes(currentSearch);
+                    return matchesFilter && matchesSearch;
+                });
+                
+                // Clear the grid
+                ideasGrid.innerHTML = '';
+                
+                // Show empty state if no ideas
+                if (filteredIdeas.length === 0) {
+                    ideasGrid.appendChild(emptyState);
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                // Render idea cards
+                filteredIdeas.forEach(idea => {
+                    const ideaCard = document.createElement('div');
+                    ideaCard.className = 'idea-card';
+                    ideaCard.innerHTML = `
+                        <div class="card-header">
+                            <h3 class="card-title">${idea.title}</h3>
+                            <span class="card-category">${idea.category}</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-description">${idea.description}</p>
+                        </div>
+                        <div class="card-footer">
+                            <span class="status-badge status-${idea.status.toLowerCase().replace(' ', '-')}">${idea.status}</span>
+                            <div class="card-actions">
+                                <button class="action-btn edit-btn" data-id="${idea.id}">✏️</button>
+                                <button class="action-btn delete-btn" data-id="${idea.id}">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    ideasGrid.appendChild(ideaCard);
+                });
+                
+                // Add event listeners to action buttons
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        deleteIdea(id);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        editIdea(id);
+                    });
+                });
+            }
+            
+            function deleteIdea(id) {
+                if (confirm('Are you sure you want to delete this idea?')) {
+                    ideas = ideas.filter(idea => idea.id !== id);
+                    saveIdeas();
+                    renderIdeas();
+                }
+            }
+            
+            function editIdea(id) {
+                // Find the idea to edit
+                const idea = ideas.find(idea => idea.id === id);
+                if (!idea) return;
+                
+                // Fill the form with idea data
+                document.getElementById('ideaTitle').value = idea.title;
+                document.getElementById('ideaCategory').value = idea.category;
+                document.getElementById('ideaDescription').value = idea.description;
+                document.getElementById('ideaStatus').value = idea.status;
+                
+                // Remove the idea from the list (will be re-added when form is submitted)
+                ideas = ideas.filter(i => i.id !== id);
+                saveIdeas();
+                renderIdeas();
+                
+                // Scroll to form
+                document.querySelector('.sidebar').scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function exportToJsonFile() {
+                if (ideas.length === 0) {
+                    alert('No ideas to export!');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(ideas, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = 'dev-ideas.json';
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            }
+            
+            function importFromJsonFile(file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const importedIdeas = JSON.parse(e.target.result);
+                        
+                        if (!Array.isArray(importedIdeas)) {
+                            throw new Error('Invalid JSON format: Expected an array of ideas');
+                        }
+                        
+                        // Validate each idea has required fields
+                        const validIdeas = importedIdeas.filter(idea => 
+                            idea.title && idea.description && idea.category && idea.status
+                        );
+                        
+                        if (validIdeas.length === 0) {
+                            throw new Error('No valid ideas found in the file');
+                        }
+                        
+                        if (confirm(`Import ${validIdeas.length} ideas from the file?`)) {
+                            // Merge with existing ideas, avoiding duplicates by ID
+                            const existingIds = ideas.map(idea => idea.id);
+                            const newIdeas = validIdeas.filter(idea => !existingIds.includes(idea.id));
+                            
+                            ideas = [...ideas, ...newIdeas];
+                            saveIdeas();
+                            renderIdeas();
+                            alert(`Successfully imported ${newIdeas.length} new ideas!`);
+                        }
+                    } catch (error) {
+                        alert('Error importing ideas: ' + error.message);
+                    }
+                };
+                
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>
