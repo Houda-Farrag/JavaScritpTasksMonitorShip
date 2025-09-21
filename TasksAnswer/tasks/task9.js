@@ -1,6 +1,6 @@
-import ButtonComponent from "../components/Buttons.js";
-import Modal from "../components/Modals.js";
-import CreateTitle from "../components/TitleComponent.js";
+import ButtonComponent from "../../components/Buttons.js";
+import Modal from "../../components/Modals.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 let modalshow = false;
 const products = [

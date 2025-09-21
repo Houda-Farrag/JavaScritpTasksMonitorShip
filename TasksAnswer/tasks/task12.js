@@ -1,5 +1,5 @@
-import ButtonComponent from "../components/Buttons.js";
-import CreateTitle from "../components/TitleComponent.js";
+import ButtonComponent from "../../components/Buttons.js";
+import CreateTitle from "../../components/TitleComponent.js";
 export default {
   title: "Task 12 - Customizable Background Colors",
   description: "تعلم كيفية تغيير لون خلفية الصفحة وحفظ التفضيلات باستخدام JavaScript و localStorage.",

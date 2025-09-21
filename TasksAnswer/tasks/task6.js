@@ -1,4 +1,4 @@
-import CreateTitle from "../components/TitleComponent.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 const tax_rate = 0.14;
 const products = [

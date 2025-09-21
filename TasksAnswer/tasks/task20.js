@@ -1,10 +1,10 @@
-import CreateTitle from "../components/TitleComponent.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 export default {
-  title: "Task 21 -",
+  title: "Task 20 -",
   description: "",
   github:
-    "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task21.js",
+    "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task20.js",
   notes: "",
   render: (container) => {
     container.innerHTML = "";

@@ -1,10 +1,10 @@
-import CreateTitle from "../components/TitleComponent.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 export default {
-  title: "Task 17 - Constructor Functions",
-  description: "التعرف على كيفية إنشاء Functions مُنشئة (Constructor Functions) في JavaScript لبناء Objects متعددة ذات خصائص وأساليب متشابهة.",
+  title: "Task 19 -",
+  description: "",
   github:
-    "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task17.js",
+    "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task19.js",
   notes: "",
   render: (container) => {
     container.innerHTML = "";
@@ -17,7 +17,7 @@ export default {
     wrapper.style.fontFamily = "Arial, sans-serif";
 
     const title = CreateTitle(
-      "ان",
+      "المستخدمين",
       "text-3xl font-bold mb-4 text-center border-b border-gray-300 p-6 bg-gray-200  ",
       "h1"
     );

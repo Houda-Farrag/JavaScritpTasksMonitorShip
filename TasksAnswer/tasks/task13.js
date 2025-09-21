@@ -1,8 +1,8 @@
-import ButtonComponent from "../components/Buttons.js";
-import CreateTitle from "../components/TitleComponent.js";
+import ButtonComponent from "../../components/Buttons.js";
+import CreateTitle from "../../components/TitleComponent.js";
 import NotificationsMessage, {
   CustomNotificationMessage,
-} from "../components/NotificationsMessage.js";
+} from "../../components/NotificationsMessage.js";
 const personData = {
   name: "John Doe",
   age: 30,

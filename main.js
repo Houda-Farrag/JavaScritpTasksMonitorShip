@@ -1,4 +1,4 @@
-import tasks from "./tasks/index.js"; // imports all tasks
+import tasks from "./TasksAnswer/tasks/index.js"; // imports all tasks
 import TaskList from "./components/TaskList.js";
 import TaskViewer from "./components/TaskViewer.js";
 

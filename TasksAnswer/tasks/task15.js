@@ -1,4 +1,4 @@
-import CreateTitle from "../components/TitleComponent.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 export default {
   title: "Task 15 - Text Manipulation",

@@ -1,5 +1,5 @@
-import ButtonComponent from "../components/Buttons.js";
-import CreateTitle from "../components/TitleComponent.js";
+import ButtonComponent from "../../components/Buttons.js";
+import CreateTitle from "../../components/TitleComponent.js";
 import { renderProduct, calculateTax1 } from "../tasks/task6.js";
 const products = [
   { name: "منتج 1", price: 50, taxrate: 0.3 },

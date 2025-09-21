@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop with Native JS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 20px;
+        }
+        
+        .draggable-container, .dropzone, .status {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status {
+            grid-column: span 2;
+        }
+        
+        .draggable {
+            padding: 15px;
+            margin: 10px 0;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+        
+        .draggable.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+            background: #2980b9;
+        }
+        
+        .dropzone {
+            min-height: 200px;
+            transition: all 0.3s ease;
+        }
+        
+        .dropzone.drag-over {
+            background: #ecf0f1;
+            border: 2px dashed #3498db;
+        }
+        
+        .dropped-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #2ecc71;
+            color: white;
+            border-radius: 4px;
+        }
+        
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Drag and Drop with Native JavaScript</h1>
+        
+        <div class="draggable-container">
+            <h2>Draggable Items</h2>
+            <div class="draggable" draggable="true" data-id="1">Item 1</div>
+            <div class="draggable" draggable="true" data-id="2">Item 2</div>
+            <div class="draggable" draggable="true" data-id="3">Item 3</div>
+            <div class="draggable" draggable="true" data-id="4">Item 4</div>
+        </div>
+        
+        <div class="dropzone">
+            <h2>Drop Zone</h2>
+            <p>Drop items here</p>
+        </div>
+        
+        <div class="status">
+            <h2>Status</h2>
+            <p id="status-message">No action yet. Drag an item to begin.</p>
+        </div>
+    </div>
+    
+    <button class="reset-btn">Reset</button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all draggable elements and the dropzone
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzone = document.querySelector('.dropzone');
+            const statusMessage = document.getElementById('status-message');
+            const resetBtn = document.querySelector('.reset-btn');
+            
+            // Store the original parent of each draggable element
+            const originalParents = new Map();
+            draggables.forEach(draggable => {
+                originalParents.set(draggable, draggable.parentNode);
+            });
+            
+            // Add event listeners to each draggable element
+            draggables.forEach(draggable => {
+                // When dragging starts
+                draggable.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.dataset.id);
+                    this.classList.add('dragging');
+                    statusMessage.textContent = `Dragging ${this.textContent}`;
+                    
+                    // Set a custom drag image (optional)
+                    // const dragImage = this.cloneNode(true);
+                    // dragImage.style.width = (this.offsetWidth * 0.8) + 'px';
+                    // e.dataTransfer.setDragImage(dragImage, 0, 0);
+                });
+                
+                // When dragging ends
+                draggable.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    statusMessage.textContent = `Drag ended for ${this.textContent}`;
+                });
+            });
+            
+            // Add event listeners to the dropzone
+            dropzone.addEventListener('dragover', function(e) {
+                e.preventDefault(); // Necessary to allow dropping
+                this.classList.add('drag-over');
+                statusMessage.textContent = 'Drag over drop zone';
+            });
+            
+            dropzone.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+                statusMessage.textContent = 'Drag left drop zone';
+            });
+            
+            dropzone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                // Get the id of the dragged element
+                const id = e.dataTransfer.getData('text/plain');
+                const draggable = document.querySelector(`.draggable[data-id="${id}"]`);
+                
+                if (draggable) {
+                    // Add to dropzone with a different style
+                    const droppedItem = draggable.cloneNode(true);
+                    droppedItem.classList.remove('dragging');
+                    droppedItem.classList.add('dropped-item');
+                    
+                    // Make it no longer draggable
+                    droppedItem.draggable = false;
+                    
+                    this.appendChild(droppedItem);
+                    
+                    // Remove the original element
+                    draggable.remove();
+                    
+                    statusMessage.textContent = `Dropped ${draggable.textContent} in the drop zone`;
+                }
+            });
+            
+            // Reset functionality
+            resetBtn.addEventListener('click', function() {
+                // Clear the dropzone
+                while (dropzone.firstChild) {
+                    dropzone.removeChild(dropzone.firstChild);
+                }
+                
+                // Recreate the dropzone content
+                const h2 = document.createElement('h2');
+                h2.textContent = 'Drop Zone';
+                
+                const p = document.createElement('p');
+                p.textContent = 'Drop items here';
+                
+                dropzone.appendChild(h2);
+                dropzone.appendChild(p);
+                
+                // Restore all draggables to their original position
+                draggables.forEach(draggable => {
+                    const originalParent = originalParents.get(draggable);
+                    if (!document.body.contains(draggable)) {
+                        const newDraggable = draggable.cloneNode(true);
+                        newDraggable.classList.remove('dropped-item');
+                        newDraggable.draggable = true;
+                        originalParent.appendChild(newDraggable);
+                    }
+                });
+                
+                // Reattach event listeners to the new draggables
+                document.querySelectorAll('.draggable').forEach(draggable => {
+                    draggable.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', this.dataset.id);
+                        this.classList.add('dragging');
+                        statusMessage.textContent = `Dragging ${this.textContent}`;
+                    });
+                    
+                    draggable.addEventListener('dragend', function() {
+                        this.classList.remove('dragging');
+                        statusMessage.textContent = `Drag ended for ${this.textContent}`;
+                    });
+                });
+                
+                statusMessage.textContent = 'Reset completed. You can start dragging again.';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-import NotificationsMessage from "../components/NotificationsMessage.js";
-import CreateTitle from "../components/TitleComponent.js";
+import NotificationsMessage from "../../components/NotificationsMessage.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 const users = [
   {

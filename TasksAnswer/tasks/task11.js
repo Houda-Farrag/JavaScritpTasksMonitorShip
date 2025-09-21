@@ -1,5 +1,5 @@
-import ButtonComponent from "../components/Buttons.js";
-import CreateTitle from "../components/TitleComponent.js";
+import ButtonComponent from "../../components/Buttons.js";
+import CreateTitle from "../../components/TitleComponent.js";
 export default {
   title: "Task 11 - Interactive Clock",
   description: "",

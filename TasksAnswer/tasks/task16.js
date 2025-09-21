@@ -1,5 +1,5 @@
-import { CustomNotificationMessage } from "../components/NotificationsMessage.js";
-import CreateTitle from "../components/TitleComponent.js";
+import { CustomNotificationMessage } from "../../components/NotificationsMessage.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 export default {
   title: "Task 16 - Form Validation",

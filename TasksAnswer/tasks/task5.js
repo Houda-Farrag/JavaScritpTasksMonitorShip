@@ -1,6 +1,6 @@
-import ButtonComponent from "../components/Buttons.js";
-import InputComponent from "../components/InputComponent.js";
-import CreateTitle from "../components/TitleComponent.js";
+import ButtonComponent from "../../components/Buttons.js";
+import InputComponent from "../../components/InputComponent.js";
+import CreateTitle from "../../components/TitleComponent.js";
 
 function createProductItem(product) {
   const li = document.createElement("li");
