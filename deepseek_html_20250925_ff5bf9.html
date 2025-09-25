@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Loading Methods Explained</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        body.rtl {
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .language-selector {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .language-selector button.active {
+            background: #fdbb2d;
+            color: #1a2a6c;
+            font-weight: bold;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fdbb2d, #b21f1f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 25px 0 15px;
+            color: #fdbb2d;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            border-left: 4px solid #fdbb2d;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+        
+        body.rtl .code-block {
+            border-left: none;
+            border-right: 4px solid #fdbb2d;
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .demo-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .demo-box {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .demo-box h3 {
+            color: #fdbb2d;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        button {
+            background: linear-gradient(to right, #b21f1f, #fdbb2d);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .output {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            min-height: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #b21f1f, #fdbb2d);
+            z-index: 1;
+        }
+        
+        .timeline-point {
+            position: relative;
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: #1a2a6c;
+            border: 3px solid #fdbb2d;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        body.rtl .comparison-table th, 
+        body.rtl .comparison-table td {
+            text-align: right;
+        }
+        
+        .comparison-table th {
+            background: rgba(253, 187, 45, 0.2);
+            color: #fdbb2d;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .localization-info {
+            background: rgba(253, 187, 45, 0.1);
+            border: 1px solid #fdbb2d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .localization-info h3 {
+            color: #fdbb2d;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-section {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .timeline::before {
+                display: none;
+            }
+            
+            .timeline-point {
+                margin-bottom: 20px;
+                text-align: left;
+            }
+            
+            body.rtl .timeline-point {
+                text-align: right;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-selector">
+            <button id="lang-en" class="active">English</button>
+            <button id="lang-ar">العربية</button>
+        </div>
+        
+        <header>
+            <h1 data-i18n="title">JavaScript Loading & Execution Methods</h1>
+            <p data-i18n="subtitle">Understanding how JavaScript files load and interact with HTML</p>
+        </header>
+        
+        <section>
+            <h2 data-i18n="your-code">Your Code Example</h2>
+            <p data-i18n="code-explanation">You're using a module script tag to load your JavaScript:</p>
+            <div class="code-block">
+                &lt;script type="module" src="/js/main.js"&gt;&lt;/script&gt;
+            </div>
+            <p data-i18n="module-explanation">This tells the browser to load <code>main.js</code> as an ES6 module. Modules have their own scope and use strict mode by default.</p>
+        </section>
+        
+        <section>
+            <h2 data-i18n="loading-methods">JavaScript Loading Methods</h2>
+            
+            <div class="timeline">
+                <div class="timeline-point">
+                    <div class="timeline-dot"></div>
+                    <div data-i18n="timeline-1">HTML Parsing Starts</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-dot"></div>
+                    <div data-i18n="timeline-2">Script Encountered</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-dot"></div>
+                    <div data-i18n="timeline-3">Script Loading/Execution</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-dot"></div>
+                    <div data-i18n="timeline-4">HTML Parsing Resumes</div>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <div class="demo-box">
+                    <h3 data-i18n="standard-title">1. Standard Script (Synchronous)</h3>
+                    <p data-i18n="standard-desc">HTML parsing stops until the script is downloaded and executed.</p>
+                    <div class="code-block">
+                        &lt;script src="script.js"&gt;&lt;/script&gt;
+                    </div>
+                    <button onclick="demoStandard()" data-i18n="demo-button">Demo Standard Loading</button>
+                    <div class="output" id="standard-output"></div>
+                </div>
+                
+                <div class="demo-box">
+                    <h3 data-i18n="async-title">2. Async Script</h3>
+                    <p data-i18n="async-desc">Script loads in parallel with HTML parsing, executes immediately when ready.</p>
+                    <div class="code-block">
+                        &lt;script async src="script.js"&gt;&lt;/script&gt;
+                    </div>
+                    <button onclick="demoAsync()" data-i18n="demo-button">Demo Async Loading</button>
+                    <div class="output" id="async-output"></div>
+                </div>
+                
+                <div class="demo-box">
+                    <h3 data-i18n="defer-title">3. Defer Script</h3>
+                    <p data-i18n="defer-desc">Script loads in parallel but executes after HTML parsing is complete.</p>
+                    <div class="code-block">
+                        &lt;script defer src="script.js"&gt;&lt;/script&gt;
+                    </div>
+                    <button onclick="demoDefer()" data-i18n="demo-button">Demo Defer Loading</button>
+                    <div class="output" id="defer-output"></div>
+                </div>
+            </div>
+            
+            <div class="demo-box">
+                <h3 data-i18n="module-title">4. Module Script (Your Method)</h3>
+                <p data-i18n="module-desc">ES6 modules are deferred by default. They have their own scope and support imports/exports.</p>
+                <div class="code-block">
+                    &lt;script type="module" src="module.js"&gt;&lt;/script&gt;
+                </div>
+                <button onclick="demoModule()" data-i18n="demo-button">Demo Module Loading</button>
+                <div class="output" id="module-output"></div>
+            </div>
+        </section>
+        
+        <section>
+            <h2 data-i18n="comparison-title">Comparison Table</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="method-col">Method</th>
+                        <th data-i18n="loading-col">Loading</th>
+                        <th data-i18n="execution-col">Execution</th>
+                        <th data-i18n="dom-event-col">DOM Content Loaded Event</th>
+                        <th data-i18n="usecase-col">Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-i18n="standard-name">Standard (no attribute)</td>
+                        <td data-i18n="standard-loading">Blocks HTML parsing</td>
+                        <td data-i18n="standard-execution">Immediately after loading</td>
+                        <td data-i18n="standard-dom">Waits for script execution</td>
+                        <td data-i18n="standard-usecase">Scripts that need to modify DOM immediately</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="async-name">Async</td>
+                        <td data-i18n="async-loading">Parallel with HTML parsing</td>
+                        <td data-i18n="async-execution">As soon as ready (may interrupt parsing)</td>
+                        <td data-i18n="async-dom">Doesn't wait for async scripts</td>
+                        <td data-i18n="async-usecase">Independent scripts (analytics, ads)</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="defer-name">Defer</td>
+                        <td data-i18n="defer-loading">Parallel with HTML parsing</td>
+                        <td data-i18n="defer-execution">After HTML parsing completes</td>
+                        <td data-i18n="defer-dom">Waits for deferred scripts</td>
+                        <td data-i18n="defer-usecase">Scripts that need full DOM access</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="module-name">Module (type="module")</td>
+                        <td data-i18n="module-loading">Parallel with HTML parsing</td>
+                        <td data-i18n="module-execution">After HTML parsing completes (like defer)</td>
+                        <td data-i18n="module-dom">Waits for module execution</td>
+                        <td data-i18n="module-usecase">Modern JavaScript with imports/exports</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section>
+            <h2 data-i18n="key-concepts">Key Concepts</h2>
+            <div class="demo-box">
+                <h3 data-i18n="events-title">DOMContentLoaded vs Load Events</h3>
+                <p><strong data-i18n="dom-content-loaded">DOMContentLoaded:</strong> <span data-i18n="dom-content-desc">Fires when HTML is fully parsed and DOM is built</span></p>
+                <p><strong data-i18n="load-event">Load:</strong> <span data-i18n="load-event-desc">Fires when all resources (images, stylesheets) are loaded</span></p>
+                <button onclick="demoEvents()" data-i18n="demo-button">Demo Events</button>
+                <div class="output" id="events-output"></div>
+            </div>
+            
+            <div class="demo-box">
+                <h3 data-i18n="dynamic-title">Dynamic Script Loading</h3>
+                <p data-i18n="dynamic-desc">You can also load scripts dynamically using JavaScript:</p>
+                <div class="code-block">
+                    const script = document.createElement('script');
+                    script.src = 'dynamic.js';
+                    document.head.appendChild(script);
+                </div>
+                <button onclick="demoDynamic()" data-i18n="demo-button">Load Script Dynamically</button>
+                <div class="output" id="dynamic-output"></div>
+            </div>
+        </section>
+        
+        <div class="localization-info">
+            <h3 data-i18n="localization-title">About Localization & Internationalization</h3>
+            <p data-i18n="localization-desc">This page demonstrates internationalization (i18n) and localization (l10n) by supporting multiple languages. Key implementation details:</p>
+            <ul>
+                <li data-i18n="localization-point-1">Text content is stored in language-specific JSON objects</li>
+                <li data-i18n="localization-point-2">HTML elements have data-i18n attributes for text replacement</li>
+                <li data-i18n="localization-point-3">CSS handles RTL (right-to-left) layout for Arabic</li>
+                <li data-i18n="localization-point-4">Language switching updates all text and layout direction</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p data-i18n="footer-1">Understanding JavaScript loading is crucial for web performance and proper script execution.</p>
+            <p data-i18n="footer-2">Your module approach is modern and efficient for organized codebases!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Language configuration
+        const translations = {
+            en: {
+                "title": "JavaScript Loading & Execution Methods",
+                "subtitle": "Understanding how JavaScript files load and interact with HTML",
+                "your-code": "Your Code Example",
+                "code-explanation": "You're using a module script tag to load your JavaScript:",
+                "module-explanation": "This tells the browser to load <code>main.js</code> as an ES6 module. Modules have their own scope and use strict mode by default.",
+                "loading-methods": "JavaScript Loading Methods",
+                "timeline-1": "HTML Parsing Starts",
+                "timeline-2": "Script Encountered",
+                "timeline-3": "Script Loading/Execution",
+                "timeline-4": "HTML Parsing Resumes",
+                "standard-title": "1. Standard Script (Synchronous)",
+                "standard-desc": "HTML parsing stops until the script is downloaded and executed.",
+                "async-title": "2. Async Script",
+                "async-desc": "Script loads in parallel with HTML parsing, executes immediately when ready.",
+                "defer-title": "3. Defer Script",
+                "defer-desc": "Script loads in parallel but executes after HTML parsing is complete.",
+                "module-title": "4. Module Script (Your Method)",
+                "module-desc": "ES6 modules are deferred by default. They have their own scope and support imports/exports.",
+                "demo-button": "Demo Loading",
+                "comparison-title": "Comparison Table",
+                "method-col": "Method",
+                "loading-col": "Loading",
+                "execution-col": "Execution",
+                "dom-event-col": "DOM Content Loaded Event",
+                "usecase-col": "Use Case",
+                "standard-name": "Standard (no attribute)",
+                "standard-loading": "Blocks HTML parsing",
+                "standard-execution": "Immediately after loading",
+                "standard-dom": "Waits for script execution",
+                "standard-usecase": "Scripts that need to modify DOM immediately",
+                "async-name": "Async",
+                "async-loading": "Parallel with HTML parsing",
+                "async-execution": "As soon as ready (may interrupt parsing)",
+                "async-dom": "Doesn't wait for async scripts",
+                "async-usecase": "Independent scripts (analytics, ads)",
+                "defer-name": "Defer",
+                "defer-loading": "Parallel with HTML parsing",
+                "defer-execution": "After HTML parsing completes",
+                "defer-dom": "Waits for deferred scripts",
+                "defer-usecase": "Scripts that need full DOM access",
+                "module-name": "Module (type=\"module\")",
+                "module-loading": "Parallel with HTML parsing",
+                "module-execution": "After HTML parsing completes (like defer)",
+                "module-dom": "Waits for module execution",
+                "module-usecase": "Modern JavaScript with imports/exports",
+                "key-concepts": "Key Concepts",
+                "events-title": "DOMContentLoaded vs Load Events",
+                "dom-content-loaded": "DOMContentLoaded:",
+                "dom-content-desc": "Fires when HTML is fully parsed and DOM is built",
+                "load-event": "Load:",
+                "load-event-desc": "Fires when all resources (images, stylesheets) are loaded",
+                "dynamic-title": "Dynamic Script Loading",
+                "dynamic-desc": "You can also load scripts dynamically using JavaScript:",
+                "localization-title": "About Localization & Internationalization",
+                "localization-desc": "This page demonstrates internationalization (i18n) and localization (l10n) by supporting multiple languages. Key implementation details:",
+                "localization-point-1": "Text content is stored in language-specific JSON objects",
+                "localization-point-2": "HTML elements have data-i18n attributes for text replacement",
+                "localization-point-3": "CSS handles RTL (right-to-left) layout for Arabic",
+                "localization-point-4": "Language switching updates all text and layout direction",
+                "footer-1": "Understanding JavaScript loading is crucial for web performance and proper script execution.",
+                "footer-2": "Your module approach is modern and efficient for organized codebases!"
+            },
+            ar: {
+                "title": "طرق تحميل وتنفيذ جافا سكريبت",
+                "subtitle": "فهم كيفية تحميل ملفات جافا سكريبت وتفاعلها مع HTML",
+                "your-code": "مثال الكود الخاص بك",
+                "code-explanation": "أنت تستخدم وسم سكريبت من النوع module لتحميل جافا سكريبت:",
+                "module-explanation": "يخبر هذا المتصفح بتحميل <code>main.js</code> كوحدة ES6. الوحدات لها نطاقها الخاص وتستخدم الوضع الصارم افتراضيًا.",
+                "loading-methods": "طرق تحميل جافا سكريبت",
+                "timeline-1": "بدء تحليل HTML",
+                "timeline-2": "مواجهة السكريبت",
+                "timeline-3": "تحميل/تنفيذ السكريبت",
+                "timeline-4": "استئناف تحليل HTML",
+                "standard-title": "1. السكريبت العادي (متزامن)",
+                "standard-desc": "يتوقف تحليل HTML حتى يتم تحميل السكريبت وتنفيذه.",
+                "async-title": "2. سكريبت غير متزامن (Async)",
+                "async-desc": "يتم تحميل السكريبت بالتوازي مع تحليل HTML، وينفذ فور استعداده.",
+                "defer-title": "3. سكريبت مؤجل (Defer)",
+                "defer-desc": "يتم تحميل السكريبت بالتوازي ولكن ينفذ بعد اكتمال تحليل HTML.",
+                "module-title": "4. سكريبت الوحدة (طريقتك)",
+                "module-desc": "وحدات ES6 مؤجلة افتراضيًا. لها نطاقها الخاص وتدعم الاستيراد والتصدير.",
+                "demo-button": "عرض التجربة",
+                "comparison-title": "جدول المقارنة",
+                "method-col": "الطريقة",
+                "loading-col": "التحميل",
+                "execution-col": "التنفيذ",
+                "dom-event-col": "حدث تحميل DOM",
+                "usecase-col": "حالة الاستخدام",
+                "standard-name": "عادي (بدون سمة)",
+                "standard-loading": "يعيق تحليل HTML",
+                "standard-execution": "فور الانتهاء من التحميل",
+                "standard-dom": "ينتظر تنفيذ السكريبت",
+                "standard-usecase": "السكريبتات التي تحتاج لتعديل DOM فورًا",
+                "async-name": "غير متزامن (Async)",
+                "async-loading": "بالتوازي مع تحليل HTML",
+                "async-execution": "حالما يكون جاهزًا (قد يقاطع التحليل)",
+                "async-dom": "لا ينتظر السكريبتات غير المتزامنة",
+                "async-usecase": "سكريبتات مستقلة (التحليلات، الإعلانات)",
+                "defer-name": "مؤجل (Defer)",
+                "defer-loading": "بالتوازي مع تحليل HTML",
+                "defer-execution": "بعد اكتمال تحليل HTML",
+                "defer-dom": "ينتظر السكريبتات المؤجلة",
+                "defer-usecase": "السكريبتات التي تحتاج وصولاً كاملاً إلى DOM",
+                "module-name": "وحدة (type=\"module\")",
+                "module-loading": "بالتوازي مع تحليل HTML",
+                "module-execution": "بعد اكتمال تحليل HTML (مثل Defer)",
+                "module-dom": "ينتظر تنفيذ الوحدة",
+                "module-usecase": "جافا سكريبت حديثة مع الاستيراد/التصدير",
+                "key-concepts": "المفاهيم الأساسية",
+                "events-title": "أحداث DOMContentLoaded مقابل Load",
+                "dom-content-loaded": "DOMContentLoaded:",
+                "dom-content-desc": "ينطلق عندما يتم تحليل HTML بالكامل وبناء DOM",
+                "load-event": "Load:",
+                "load-event-desc": "ينطلق عندما يتم تحميل جميع الموارد (الصور، صفحات الأنماط)",
+                "dynamic-title": "تحميل السكريبتات ديناميكيًا",
+                "dynamic-desc": "يمكنك أيضًا تحميل السكريبتات ديناميكيًا باستخدام جافا سكريبت:",
+                "localization-title": "حول الترجمة والتوطين",
+                "localization-desc": "توضح هذه الصفحة التدويل (i18n) والترجمة (l10n) من خلال دعم لغات متعددة. تفاصيل التنفيذ الرئيسية:",
+                "localization-point-1": "يتم تخزين محتوى النص في كائنات JSON خاصة باللغة",
+                "localization-point-2": "تحتوي عناصر HTML على سمات data-i18n لاستبدال النص",
+                "localization-point-3": "يتعامل CSS مع تخطيط RTL (من اليمين لليسار) للعربية",
+                "localization-point-4": "يحدث تبديل اللغة تحديثًا لجميع النصوص واتجاه التخطيط",
+                "footer-1": "فهم تحميل جافا سكريبت أمر بالغ الأهمية لأداء الويب وتنفيذ السكريبتات بشكل صحيح.",
+                "footer-2": "نهج الوحدة الخاص بك حديث وفعال لقواعد التعليمات البرمجية المنظمة!"
+            }
+        };
+
+        // Set the language
+        let currentLang = 'en';
+
+        // Function to change language
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update button states
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-ar').classList.toggle('active', lang === 'ar');
+            
+            // Update text direction
+            document.body.classList.toggle('rtl', lang === 'ar');
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', lang);
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.value = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update demo outputs if they exist
+            updateDemoOutputs(lang);
+        }
+
+        // Update demo outputs based on language
+        function updateDemoOutputs(lang) {
+            // This function would update any dynamic content in the demos
+            // For now, we'll just clear the outputs
+            const outputs = document.querySelectorAll('.output');
+            outputs.forEach(output => {
+                if (output.innerHTML.includes('Simulating') || output.innerHTML.includes('يتم محاكاة')) {
+                    output.innerHTML = '';
+                }
+            });
+        }
+
+        // Demo functions for each loading method
+        function demoStandard() {
+            const output = document.getElementById('standard-output');
+            const simulatingText = currentLang === 'en' 
+                ? '<p>Simulating standard script loading...</p>' 
+                : '<p>يتم محاكاة تحميل السكريبت العادي...</p>';
+            
+            output.innerHTML = simulatingText;
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>HTML parsing paused while script loads...</p>'
+                    : '<p>تم إيقاف تحليل HTML أثناء تحميل السكريبت...</p>';
+                output.innerHTML += text;
+            }, 500);
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>Script executed! HTML parsing resumes.</p>'
+                    : '<p>تم تنفيذ السكريبت! يستأنف تحليل HTML.</p>';
+                output.innerHTML += text;
+            }, 1500);
+        }
+        
+        function demoAsync() {
+            const output = document.getElementById('async-output');
+            const simulatingText = currentLang === 'en' 
+                ? '<p>Simulating async script loading...</p>' 
+                : '<p>يتم محاكاة تحميل السكريبت غير المتزامن...</p>';
+            
+            output.innerHTML = simulatingText;
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>HTML parsing continues while script loads...</p>'
+                    : '<p>يستمر تحليل HTML أثناء تحميل السكريبت...</p>';
+                output.innerHTML += text;
+            }, 500);
+            
+            // Async might execute at any time
+            const executeTime = 500 + Math.random() * 1500;
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? `<p>Script executed at random time (async behavior)!</p>`
+                    : `<p>تم تنفيذ السكريبت في وقت عشوائي (سلوك غير متزامن)!</p>`;
+                output.innerHTML += text;
+            }, executeTime);
+        }
+        
+        function demoDefer() {
+            const output = document.getElementById('defer-output');
+            const simulatingText = currentLang === 'en' 
+                ? '<p>Simulating defer script loading...</p>' 
+                : '<p>يتم محاكاة تحميل السكريبت المؤجل...</p>';
+            
+            output.innerHTML = simulatingText;
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>HTML parsing continues while script loads...</p>'
+                    : '<p>يستمر تحليل HTML أثناء تحميل السكريبت...</p>';
+                output.innerHTML += text;
+            }, 500);
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>HTML parsing completed!</p>'
+                    : '<p>تم اكتمال تحليل HTML!</p>';
+                output.innerHTML += text;
+            }, 1200);
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>Deferred script executed after HTML parsing.</p>'
+                    : '<p>تم تنفيذ السكريبت المؤجل بعد تحليل HTML.</p>';
+                output.innerHTML += text;
+            }, 1500);
+        }
+        
+        function demoModule() {
+            const output = document.getElementById('module-output');
+            const simulatingText = currentLang === 'en' 
+                ? '<p>Simulating module script loading...</p>' 
+                : '<p>يتم محاكاة تحميل سكريبت الوحدة...</p>';
+            
+            output.innerHTML = simulatingText;
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>HTML parsing continues while module loads...</p>'
+                    : '<p>يستمر تحليل HTML أثناء تحميل الوحدة...</p>';
+                output.innerHTML += text;
+            }, 500);
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>HTML parsing completed!</p>'
+                    : '<p>تم اكتمال تحليل HTML!</p>';
+                output.innerHTML += text;
+            }, 1200);
+            
+            setTimeout(() => {
+                const text = currentLang === 'en'
+                    ? '<p>Module executed (deferred by default).</p><p>Modules have their own scope and support imports.</p>'
+                    : '<p>تم تنفيذ الوحدة (مؤجلة افتراضيًا).</p><p>الوحدات لها نطاقها الخاص وتدعم الاستيراد.</p>';
+                output.innerHTML += text;
+            }, 1500);
+        }
+        
+        function demoEvents() {
+            const output = document.getElementById('events-output');
+            output.innerHTML = '';
+            
+            // Simulate DOMContentLoaded event
+            const domText = currentLang === 'en'
+                ? '<p>DOMContentLoaded: HTML parsed and DOM built ✅</p>'
+                : '<p>DOMContentLoaded: تم تحليل HTML وبناء DOM ✅</p>';
+            output.innerHTML += domText;
+            
+            // Simulate Load event after a delay
+            setTimeout(() => {
+                const loadText = currentLang === 'en'
+                    ? '<p>Load: All resources loaded ✅</p>'
+                    : '<p>Load: تم تحميل جميع الموارد ✅</p>';
+                output.innerHTML += loadText;
+            }, 2000);
+        }
+        
+        function demoDynamic() {
+            const output = document.getElementById('dynamic-output');
+            const simulatingText = currentLang === 'en' 
+                ? '<p>Creating and loading a script dynamically...</p>' 
+                : '<p>يتم إنشاء وتحميل سكريبت ديناميكيًا...</p>';
+            
+            output.innerHTML = simulatingText;
+            
+            // Create a script element
+            const script = document.createElement('script');
+            
+            // Add a simple function to the script
+            script.textContent = `
+                window.dynamicScriptLoaded = function() {
+                    const output = document.getElementById('dynamic-output');
+                    const text = ${currentLang === 'en' ? 
+                        '"<p>Dynamically loaded script executed! ✅</p>"' : 
+                        '"<p>تم تنفيذ السكريبت المحمل ديناميكيًا! ✅</p>"'};
+                    output.innerHTML += text;
+                };
+                window.dynamicScriptLoaded();
+            `;
+            
+            // Add to the document
+            document.head.appendChild(script);
+        }
+        
+        // Initialize language buttons
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-ar').addEventListener('click', () => setLanguage('ar'));
+        
+        // Add some interactive examples
+        document.addEventListener('DOMContentLoaded', function() {
+            const output = document.getElementById('events-output');
+            if (output) {
+                const text = currentLang === 'en'
+                    ? '<p>This page\'s DOMContentLoaded event fired!</p>'
+                    : '<p>تم تشغيل حدث DOMContentLoaded لهذه الصفحة!</p>';
+                output.innerHTML += text;
+            }
+        });
+        
+        window.addEventListener('load', function() {
+            const output = document.getElementById('events-output');
+            if (output) {
+                setTimeout(() => {
+                    const text = currentLang === 'en'
+                        ? '<p>This page\'s Load event fired!</p>'
+                        : '<p>تم تشغيل حدث Load لهذه الصفحة!</p>';
+                    output.innerHTML += text;
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

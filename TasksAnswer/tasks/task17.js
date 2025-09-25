@@ -1,47 +1,50 @@
 import Modal from "../../components/Modals.js";
 import CreateTitle from "../../components/TitleComponent.js";
 
-
-function User(name ="",age="",mail="") {
-  this.name = name ;
+function User(name = "", age = "", mail = "") {
+  this.name = name;
   this.age = age;
   this.mail = mail;
 
-  this.getInfo = function() {
+  this.getInfo = function () {
     return `Name: ${this.name}, Age: ${this.age}, Email: ${this.mail}`;
-  }
+  };
 
-  this.great = function() {
+  this.great = function () {
     // مرحبًا سما! عمرك 30 عامًا وبريدك الإلكتروني هو sama@example.com.
     return `مرحبا ${this.name}! عمرك ${this.age} عامًا وبريدك الإلكتروني هو ${this.mail}.`;
-  }
-  this.updateUser = function (){
-
-  
+  };
+  this.updateUser = function () {
     const modal = Modal({
       title: "تحديث معلومات المستخدم",
       fields: [
         { name: "name", label: "الاسم", required: true },
         { name: "age", label: "العمر", type: "number", required: true },
-        { name: "mail", label: "البريد الألكتروني", type: "email", required: true },
+        {
+          name: "mail",
+          label: "البريد الألكتروني",
+          type: "email",
+          required: true,
+        },
       ],
       submitBtnText: "حفظ التغييرات",
-      submitBtnClass: "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded",
+      submitBtnClass:
+        "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded",
       onSubmit: (data) => {
         this.name = data.name;
         this.age = data.age;
         this.mail = data.mail;
         modal.remove();
         alert("تم تحديث معلومات المستخدم بنجاح!");
-      }
+      },
     });
-  }
+  };
 }
-
 
 export default {
   title: "Task 17 - Constructor Functions",
-  description: "التعرف على كيفية إنشاء Functions مُنشئة (Constructor Functions) في JavaScript لبناء Objects متعددة ذات خصائص وأساليب متشابهة.",
+  description:
+    "التعرف على كيفية إنشاء Functions مُنشئة (Constructor Functions) في JavaScript لبناء Objects متعددة ذات خصائص وأساليب متشابهة.",
   github:
     "https://github.com/Houda-Farrag/JavaScritpTasksMonitorShip/blob/main/tasks/task17.js",
   notes: "",
@@ -68,13 +71,15 @@ export default {
     ];
 
     const usersContainer = document.createElement("div");
-    usersContainer.className = "grid grid-cols  md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-4";
+    usersContainer.className =
+      "grid grid-cols  md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-4";
     usersData.forEach((user, index) => {
-      const {name, age,mail, updateUser} = user
+      const { name, age, mail, updateUser } = user;
       const userCard = document.createElement("div");
       const updateBtn = document.createElement("button");
       updateBtn.textContent = "تحديث";
-      updateBtn.className = "mt-2 bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded";
+      updateBtn.className =
+        "mt-2 bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded";
       updateBtn.onclick = () => updateUser();
       userCard.className = "border p-4 rounded shadow";
       userCard.innerHTML = `
@@ -87,7 +92,6 @@ export default {
       usersContainer.appendChild(userCard);
     });
 
-    
     wrapper.appendChild(title);
     wrapper.appendChild(usersContainer);
     container.appendChild(wrapper);
